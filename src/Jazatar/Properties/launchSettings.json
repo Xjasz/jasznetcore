@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "Jazatar": {
+      "commandName": "Project",
+      "commandLineArgs": "RUN_JAZATAR DEV",
+      "nativeDebugging": false
+    },
+    "AltLookup": {
+      "commandName": "Project",
+      "commandLineArgs": "RUN_ALT DEV"
+    }
+  }
+}

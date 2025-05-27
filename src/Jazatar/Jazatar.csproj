@@ -1,0 +1,66 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Company>Self</Company>
+    <Authors>Nicholas Codalata</Authors>
+    <OutputType>Exe</OutputType>
+    <Description>A personal helper application that runs on a local computer</Description>
+    <RunAnalyzers>false</RunAnalyzers>
+    <Platforms>AnyCPU</Platforms>
+	<PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JaszCore\JaszCore.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\**" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="OpenAL.Soft" Version="1.19.1" />
+    <PackageReference Include="OpenTK.NetStandard" Version="1.0.5.32" />
+    <PackageReference Include="System.Speech" Version="6.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <OutputResources>Resources\</OutputResources>
+    <OutputLogs>Logs\</OutputLogs>
+    <OutputDebug>bin\Debug\</OutputDebug>
+    <OutputRelease>bin\Release\</OutputRelease>
+    <OutputGitIgnore>.gitignore</OutputGitIgnore>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <OutputPath>$(ProjectDir)$(OutputDebug)</OutputPath>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <OutputPath>$(ProjectDir)$(OutputDebug)</OutputPath>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <OutputPath>$(ProjectDir)$(OutputRelease)</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <OutputPath>$(ProjectDir)$(OutputRelease)</OutputPath>
+  </PropertyGroup>
+  <Target Name="CreateDirectories" AfterTargets="Build" Condition="!Exists('$(ProjectDir)$(OutputDebug)$(OutputResources)') OR !Exists('$(ProjectDir)$(OutputRelease)$(OutputResources)') OR !Exists('$(ProjectDir)$(OutputDebug)$(OutputLogs)') OR !Exists('$(ProjectDir)$(OutputRelease)$(OutputLogs)')">
+    <Message Text="Created Directories -&gt; $(OutputDebug)$(OutputResources);$(OutputRelease)$(OutputResources);$(OutputDebug)$(OutputLogs);$(OutputRelease)$(OutputLogs)" Importance="high" />
+    <MakeDir Directories="$(ProjectDir)$(OutputDebug)$(OutputLogs);$(ProjectDir)$(OutputRelease)$(OutputLogs);$(ProjectDir)$(OutputDebug)$(OutputResources);$(ProjectDir)$(OutputRelease)$(OutputResources)" />
+  </Target>
+  <Target Name="CreateLoggerGitIgnore" AfterTargets="Build" Condition="!Exists('$(ProjectDir)$(OutputDebug)$(OutputLogs)$(OutputGitIgnore)') OR !Exists('$(ProjectDir)$(OutputRelease)$(OutputLogs)$(OutputGitIgnore)')">
+    <Message Text="Created Files -&gt; $(OutputDebug)$(OutputLogs)$(OutputGitIgnore);$(OutputRelease)$(OutputLogs)$(OutputGitIgnore)" Importance="high" />
+    <Exec Command="echo #Logging gitignore file &gt; $(OutputDebug)$(OutputLogs)$(OutputGitIgnore)" />
+    <Exec Command="echo * &gt;&gt; $(OutputDebug)$(OutputLogs)$(OutputGitIgnore)" />
+    <Exec Command="echo !.gitignore &gt;&gt; $(OutputDebug)$(OutputLogs)$(OutputGitIgnore)" />
+    <Copy SourceFiles="$(OutputDebug)$(OutputLogs)$(OutputGitIgnore)" DestinationFolder="$(OutputRelease)$(OutputLogs)" />
+  </Target>
+</Project>
