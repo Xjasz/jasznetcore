@@ -22,8 +22,8 @@ namespace JaszCore.App
             Log.Debug($"BaseApplication starting...");
             SystemId = systemId;
             AppArgs = systemArgs;
-            ServiceLocator.Register<IEmailService>(new EmailService(iconfiguration["Emails:SERVICE_EMAIL"], iconfiguration["Emails:SERVICE_PASS"]));
-            ServiceLocator.Register<IDatabaseService>(new DatabaseService(iconfiguration.GetConnectionString("JASZMAIN_CONNECTION"), iconfiguration.GetConnectionString("JASZOUTER_CONNECTION")));
+            // ServiceLocator.Register<IEmailService>(new EmailService(iconfiguration["Emails:SERVICE_EMAIL"], iconfiguration["Emails:SERVICE_PASS"]));
+            // ServiceLocator.Register<IDatabaseService>(new DatabaseService(iconfiguration.GetConnectionString("JASZMAIN_CONNECTION"), iconfiguration.GetConnectionString("JASZOUTER_CONNECTION")));
         }
 
         public static void ApplicationExit(object sender, EventArgs e)
