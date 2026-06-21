@@ -15,10 +15,8 @@ namespace JaszCore.Common
         {
             var key = typeof(TInterface);
             var impl = typeof(TImplementation);
-
             if (!key.IsInterface)
                 throw new InvalidOperationException($"{key.Name} must be an interface.");
-
             ForgetKey(key);
             implRegistry[key] = impl;
         }
@@ -26,13 +24,10 @@ namespace JaszCore.Common
         public static void Register<TInterface>(TInterface instance)
         {
             var key = typeof(TInterface);
-
             if (!key.IsInterface)
                 throw new InvalidOperationException($"{key.Name} must be an interface.");
-
             if (instance == null)
                 throw new ArgumentNullException(nameof(instance), $"Cannot register null instance for {key.Name}.");
-
             ForgetKey(key);
             singletonRegistry[key] = instance;
         }
@@ -52,20 +47,13 @@ namespace JaszCore.Common
         public static TInterface Get<TInterface>()
         {
             var key = typeof(TInterface);
-
             if (singletonRegistry.TryGetValue(key, out var instance))
                 return (TInterface)instance;
-
             if (implRegistry.TryGetValue(key, out var implType))
                 return CreateAndMaybeCache<TInterface>(key, implType, singleton: true);
-
-            var serviceAttr = key.GetCustomAttributes(typeof(ServiceAttribute), false)
-                                 .Cast<ServiceAttribute>()
-                                 .FirstOrDefault();
-
+            var serviceAttr = key.GetCustomAttributes(typeof(ServiceAttribute), false).Cast<ServiceAttribute>().FirstOrDefault();
             if (serviceAttr != null)
                 return CreateAndMaybeCache<TInterface>(key, serviceAttr.AttributeType, serviceAttr.Singleton);
-
             throw new InvalidOperationException($"ServiceLocator: No registered or attributed implementation found for {key.Name}.");
         }
 
@@ -79,25 +67,20 @@ namespace JaszCore.Common
         {
             if (!typeof(TInterface).IsAssignableFrom(implType))
                 throw new InvalidOperationException($"{implType.Name} does not implement {key.Name}.");
-
             var instance = CreateInstance<TInterface>(implType);
-
             if (singleton)
                 singletonRegistry.TryAdd(key, instance);
-
             return instance;
         }
 
         private static T CreateInstance<T>(Type implType)
         {
             var constructors = implType.GetConstructors();
-
             foreach (var ctor in constructors.OrderByDescending(c => c.GetParameters().Length))
             {
                 var parameters = ctor.GetParameters();
                 var resolvedParams = new object[parameters.Length];
                 var canResolve = true;
-
                 for (int i = 0; i < parameters.Length; i++)
                 {
                     try
@@ -110,15 +93,11 @@ namespace JaszCore.Common
                         break;
                     }
                 }
-
                 if (canResolve)
                     return (T)ctor.Invoke(resolvedParams);
             }
-
-            // Fallback: parameterless constructor
             if (implType.GetConstructor(Type.EmptyTypes) != null)
                 return (T)Activator.CreateInstance(implType);
-
             throw new InvalidOperationException($"Unable to resolve or instantiate {implType.Name}. No suitable constructor found.");
         }
 
