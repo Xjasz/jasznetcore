@@ -87,7 +87,7 @@ namespace JaszCore.Databases
             else
             {
                 var query = CreateQuery(entity);
-                var result = query.IsValidQuery ? Set<T>().FromSqlRaw(query.QueryString, query.QueryParams).FirstOrDefault() : default;
+                var result = query != null && query.IsValidQuery ? Set<T>().FromSqlRaw(query.QueryString, query.QueryParams).FirstOrDefault() : default;
                 return result;
             }
         }
@@ -109,7 +109,7 @@ namespace JaszCore.Databases
             else
             {
                 var query = CreateQuery(entity);
-                var results = query.IsValidQuery ? Set<T>()?.FromSqlRaw(query.QueryString, query.QueryParams)?.ToList() : default;
+                var results = query != null && query.IsValidQuery ? Set<T>()?.FromSqlRaw(query.QueryString, query.QueryParams)?.ToList() : default;
                 return results;
             }
         }

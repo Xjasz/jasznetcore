@@ -20,11 +20,11 @@ namespace Jazatar.App
         private void InitializeApp()
         {
             Log.Debug($"AppClient initializing...");
-            if (GetAppArgs()[1].Contains("RUN_JAZATAR"))
+            if (GetAppArgs()[0].Contains("RUN_JAZATAR"))
             {
                 new MainEvent().StartEvent();
             }
-            if (GetAppArgs()[1].Contains("RUN_ALT"))
+            if (GetAppArgs()[0].Contains("RUN_ALT"))
             {
                 new AltEvent().StartEvent();
             }

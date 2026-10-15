@@ -11,7 +11,7 @@ namespace JaszCore.Utils
 {
     public static class FileUtils
     {
-        private static LoggerService Log => ServiceLocator.Get<LoggerService>();
+        private static ILoggerService Log => ServiceLocator.Get<ILoggerService>();
 
         public static DirectoryInfo EnsurePathExists(this FilePathUtils path)
         {

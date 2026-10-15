@@ -14,7 +14,7 @@ namespace JaszCore.Services
     {
         private const string FOLDER_BASE = ".JaszCore";
 
-        private static LoggerService Log => ServiceLocator.Get<LoggerService>();
+        private static ILoggerService Log => ServiceLocator.Get<ILoggerService>();
         private static IAppClient AppClient => ServiceLocator.Get<IAppClient>();
 
 
