@@ -34,10 +34,19 @@ namespace Jaztar
             var rootPath = new DirectoryInfo(Directory.GetCurrentDirectory());
 
 
-            var orgProperties = Path.Combine(rootPath.Parent.Parent.Parent.Parent.FullName, S.ORG_NAME.ToLower(), S.ORG_NAME, S.PROP_FILE);
-            var appProperties = Path.Combine(rootPath.Parent.Parent.FullName, S.PROP_FILE);
+            var appRoot = rootPath.Parent?.Parent;
+            var orgRoot = appRoot?.Parent?.Parent;
+            var orgProperties = orgRoot == null ? null : Path.Combine(orgRoot.FullName, S.ORG_NAME.ToLower(), S.ORG_NAME, S.PROP_FILE);
+            var appProperties = appRoot == null ? null : Path.Combine(appRoot.FullName, S.PROP_FILE);
+            var cwdProperties = Path.Combine(rootPath.FullName, S.PROP_FILE);
 
-            var propertiesPath = File.Exists(appProperties) ? appProperties : File.Exists(orgProperties) ? orgProperties : null;
+            var propertiesPath = File.Exists(cwdProperties) ? cwdProperties : File.Exists(appProperties) ? appProperties : File.Exists(orgProperties) ? orgProperties : null;
+
+            if (propertiesPath == null)
+            {
+                Console.WriteLine($"Stopping {S.PROP_FILE} was not found under {rootPath.FullName}...");
+                Environment.Exit(1);
+            }
 
             if (propertiesPath != null)
             {

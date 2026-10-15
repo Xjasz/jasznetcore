@@ -59,10 +59,29 @@ namespace JaszCore.Services
         public SqlConnection GetMainConnection() => MainConnection;
         public SqlConnection GetOuterConnection() => OuterConnection;
 
-        public T FindLast<T>() where T : class => JaszMain.FindLast<T>();
-        public IList<T> FindList<T>(T entity) where T : class => JaszMain.FindList(entity);
-        public IList<T> GetAll<T>() where T : class => JaszMain.GetAll<T>();
-        public IList<T> GetAll<T>(string[] includes) where T : class => JaszMain.GetAll<T>(includes);
+        public T FindLast<T>() where T : class
+        {
+            var connType = ResolveConnection<T>();
+            return connType == OrgTableAttribute.CONNECTION_TYPE.JASZ_MAIN ? JaszMain.FindLast<T>() : JaszOuter.FindLast<T>();
+        }
+
+        public IList<T> FindList<T>(T entity) where T : class
+        {
+            var connType = ResolveConnection<T>();
+            return connType == OrgTableAttribute.CONNECTION_TYPE.JASZ_MAIN ? JaszMain.FindList(entity) : JaszOuter.FindList(entity);
+        }
+
+        public IList<T> GetAll<T>() where T : class
+        {
+            var connType = ResolveConnection<T>();
+            return connType == OrgTableAttribute.CONNECTION_TYPE.JASZ_MAIN ? JaszMain.GetAll<T>() : JaszOuter.GetAll<T>();
+        }
+
+        public IList<T> GetAll<T>(string[] includes) where T : class
+        {
+            var connType = ResolveConnection<T>();
+            return connType == OrgTableAttribute.CONNECTION_TYPE.JASZ_MAIN ? JaszMain.GetAll<T>(includes) : JaszOuter.GetAll<T>(includes);
+        }
 
         public T Find<T>(T entity) where T : class
         {

@@ -41,7 +41,7 @@ namespace JaszCore.Databases
         {
             if (handleIdentity)
             {
-                var tableName = (typeof(T)?.GetCustomAttributes(typeof(OrgTableAttribute), false)?.FirstOrDefault() as OrgTableAttribute).Name;
+                var tableName = (typeof(T)?.GetCustomAttributes(typeof(OrgTableAttribute), false)?.FirstOrDefault() as OrgTableAttribute)?.Name;
                 if (tableName == null)
                     throw new ApplicationException($"Type Error OrgTableAttribute is missing.... OrgTableAttribute must exist in model!!");
                 Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[" + tableName + "] ON;");
@@ -100,7 +100,7 @@ namespace JaszCore.Databases
             else
             {
                 var query = CreateQuery(entity);
-                var result = query.IsValidQuery ? Set<T>().FromSqlRaw(query.QueryString, query.QueryParams).FirstOrDefault() : default;
+                var result = query != null && query.IsValidQuery ? Set<T>().FromSqlRaw(query.QueryString, query.QueryParams).FirstOrDefault() : default;
                 return result;
             }
         }
@@ -122,7 +122,7 @@ namespace JaszCore.Databases
             else
             {
                 var query = CreateQuery(entity);
-                var results = query.IsValidQuery ? Set<T>()?.FromSqlRaw(query.QueryString, query.QueryParams)?.ToList() : default;
+                var results = query != null && query.IsValidQuery ? Set<T>()?.FromSqlRaw(query.QueryString, query.QueryParams)?.ToList() : default;
                 return results;
             }
         }

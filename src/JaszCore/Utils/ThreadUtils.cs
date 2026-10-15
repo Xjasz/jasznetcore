@@ -13,7 +13,7 @@ namespace JaszCore.Utils
 
         static readonly IDictionary<string, SemaphoreSlim> SemaphoreLookup = new ConcurrentDictionary<string, SemaphoreSlim>();
         static readonly SemaphoreSlim SemaphoreLookupLock = new SemaphoreSlim(1, 1);
-        private static LoggerService Log => ServiceLocator.Get<LoggerService>();
+        private static ILoggerService Log => ServiceLocator.Get<ILoggerService>();
 
         public static async Task<SemaphoreSlim> EnterSyncCall([CallerMemberName] string callerName = "")
         {

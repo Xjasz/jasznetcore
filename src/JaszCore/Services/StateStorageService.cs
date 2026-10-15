@@ -32,7 +32,7 @@ namespace JaszCore.Services
 
     public class StateStorageService : BaseStorageService, IStateStorageService
     {
-        private static LoggerService Log => ServiceLocator.Get<LoggerService>();
+        private static ILoggerService Log => ServiceLocator.Get<ILoggerService>();
 
 
         public async Task SaveStateAsync(object state, string type = "state")

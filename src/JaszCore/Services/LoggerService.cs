@@ -35,6 +35,7 @@ namespace JaszCore.Services
             var filePath = Path.Combine(S.LOG_DIR, S.LOG_FILE);
             var headerLine = S.GetFileHeaderLine("Logs");
             var newRunLine = S.FILE_RUNLINE;
+            Directory.CreateDirectory(S.LOG_DIR);
             if (!File.Exists(filePath))
             {
                 var fileStream = File.Create(filePath);

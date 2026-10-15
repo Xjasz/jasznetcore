@@ -99,7 +99,7 @@ namespace JaszCore.Services
             {
                 SpeechSynService.Say("Exiting.");
                 commandReturnState = S.COMMAND_RETURN_STATE.RESET;
-                Environment.Exit(1);
+                Environment.Exit(0);
             }
             if (commandObject.CommandType == COMMAND_TYPE.UNKNOWN)
             {
@@ -108,7 +108,7 @@ namespace JaszCore.Services
             }
             if (commandObject.CommandType == COMMAND_TYPE.GOTO && _processStartInfo != null)
             {
-                if (commandObject.GOTO_Command_Text.ToString() != null)
+                if (!string.IsNullOrEmpty(commandObject.GOTO_Command_Text))
                 {
                     if (commandObject.GOTO_Command_Text.ToLower().Contains("read"))
                     {
@@ -120,10 +120,10 @@ namespace JaszCore.Services
                         _processStartInfo.Arguments = "https://www.google.com/";
                         Process.Start(_processStartInfo);
                     }
-
-                    if (_processStartInfo.Arguments == null)
+                    else
                     {
                         SpeechSynService.Say("Unknown command. go to.");
+                        _processStartInfo.Arguments = "";
                         Process.Start(_processStartInfo);
                     }
                 }

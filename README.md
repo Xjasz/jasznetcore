@@ -30,15 +30,16 @@ This repository contains two related template projects demonstrating common back
 
    ```powershell
    # Windows PowerShell
-   $Env:ConnectionStrings__MAIN_CONNECTION = 'Server=...;Database=...;User Id=...;Password=...;'
-   $Env:ConnectionStrings__OUTER_CONNECTION = 'Server=...;Database=...;User Id=...;Password=...;'
+   $Env:ConnectionStrings__JASZMAIN_CONNECTION = 'Server=...;Database=...;User Id=...;Password=...;'
+   $Env:ConnectionStrings__JASZOUTER_CONNECTION = 'Server=...;Database=...;User Id=...;Password=...;'
    ```
+   The database and email services are registered in `src/JaszCore/App/BaseApplication.cs` and are commented out by default; uncomment those two lines to use them.
 4. **Build and run**:
 
    ```bash
    dotnet build
-   cd Jazatar
-   dotnet run -- DEV
+   cd src/Jazatar
+   dotnet run -- RUN_JAZATAR DEV
    ```
 
 ---

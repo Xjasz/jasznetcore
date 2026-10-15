@@ -109,12 +109,12 @@ namespace JaszCore.Services
             {
                 var json = JObject.Parse(responseContent);
                 var bearer = json["access_token"].Value<string>();
-                REQUEST_TOKENS.Add(baseUrl, bearer);
+                REQUEST_TOKENS[baseUrl] = bearer;
 
             }
             if (requestUri.Contains("auth/signin"))
             {
-                var nameSpaceStart = responseContent.Contains("xmlns=\"") ? responseContent.IndexOf("xmlns=\"" + 7) : 0;
+                var nameSpaceStart = responseContent.Contains("xmlns=\"") ? responseContent.IndexOf("xmlns=\"") + 7 : 0;
                 var nameSpaceEnd = responseContent.IndexOf("\"", nameSpaceStart);
                 if (nameSpaceStart > 0)
                 {
@@ -122,10 +122,10 @@ namespace JaszCore.Services
                     var xmlDocument = new XmlDocument();
                     xmlDocument.LoadXml(responseContent);
                     var nsmgr = new XmlNamespaceManager(xmlDocument.NameTable);
-                    nsmgr.AddNamespace(baseUrl, nameSpace);
-                    var xmlNode = xmlDocument.SelectSingleNode($"//{baseUrl}:credentials", nsmgr);
-                    REQUEST_TOKENS.Add(baseUrl, xmlNode?.Attributes["token"]?.Value);
-                    REQUEST_IDS.Add(baseUrl, xmlNode?.FirstChild?.Attributes["id"]?.Value);
+                    nsmgr.AddNamespace("ns", nameSpace);
+                    var xmlNode = xmlDocument.SelectSingleNode("//ns:credentials", nsmgr);
+                    REQUEST_TOKENS[baseUrl] = xmlNode?.Attributes?["token"]?.Value;
+                    REQUEST_IDS[baseUrl] = xmlNode?.FirstChild?.Attributes?["id"]?.Value;
                 }
             }
         }
