@@ -122,10 +122,10 @@ namespace JaszCore.Services
                     var xmlDocument = new XmlDocument();
                     xmlDocument.LoadXml(responseContent);
                     var nsmgr = new XmlNamespaceManager(xmlDocument.NameTable);
-                    nsmgr.AddNamespace(baseUrl, nameSpace);
-                    var xmlNode = xmlDocument.SelectSingleNode($"//{baseUrl}:credentials", nsmgr);
-                    REQUEST_TOKENS[baseUrl] = xmlNode?.Attributes["token"]?.Value;
-                    REQUEST_IDS[baseUrl] = xmlNode?.FirstChild?.Attributes["id"]?.Value;
+                    nsmgr.AddNamespace("ns", nameSpace);
+                    var xmlNode = xmlDocument.SelectSingleNode("//ns:credentials", nsmgr);
+                    REQUEST_TOKENS[baseUrl] = xmlNode?.Attributes?["token"]?.Value;
+                    REQUEST_IDS[baseUrl] = xmlNode?.FirstChild?.Attributes?["id"]?.Value;
                 }
             }
         }

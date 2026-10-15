@@ -73,8 +73,8 @@ namespace JaszCore.Services
             Log.Debug($"executing at: {DateTime.Now}");
             _speechRecognizer.LoadGrammar(new DictationGrammar());
             _speechRecognizer.SetInputToDefaultAudioDevice();
-            _speechRecognizer.RecognizeAsync(RecognizeMode.Multiple);
             _speechRecognizer.SpeechRecognized += new EventHandler<SpeechRecognizedEventArgs>(RecognizerSpeechRecognized);
+            _speechRecognizer.RecognizeAsync(RecognizeMode.Multiple);
             Task.Run(() =>
             {
                 Log.Debug("Started ListenForInput....");

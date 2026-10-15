@@ -9,8 +9,6 @@ namespace JaszCore.App
     public abstract class BaseApplication
     {
         private static ILoggerService Log => ServiceLocator.Get<ILoggerService>();
-        private static IEmailService EmailService => ServiceLocator.Get<IEmailService>();
-        private static ISpeechRecognitionService SpeechRecService => ServiceLocator.Get<ISpeechRecognitionService>();
 
         private readonly string SystemId;
         private readonly string[] AppArgs;
@@ -29,17 +27,18 @@ namespace JaszCore.App
         public static void ApplicationExit(object sender, EventArgs e)
         {
             Log.Debug($"BaseApplication exiting....");
-            SpeechRecService.CloseService();
+            ServiceLocator.TryGet<ISpeechRecognitionService>()?.CloseService();
             Log.CloseService();
         }
 
         public static void ApplicationErrorHandler(object sender, UnhandledExceptionEventArgs e)
         {
-            if (S.IsSendingErrorEmail())
-            {
-                EmailService.SendDevErrorEmail(e);
-            }
             Log.Error((Exception)e.ExceptionObject, "Error Message");
+            var emailService = ServiceLocator.TryGet<IEmailService>();
+            if (S.IsSendingErrorEmail() && emailService != null)
+            {
+                emailService.SendDevErrorEmail(e);
+            }
             Environment.Exit(1);
         }
     }
